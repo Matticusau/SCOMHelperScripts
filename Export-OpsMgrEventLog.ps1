@@ -15,6 +15,7 @@
       --------------------------------------------------------------------------------------------------
       1.0      MLavery      01-Jun-2014    Initial Coding
       1.1      MLavery      25-Jun-2014    Added additional events to export
+      1.2      MLavery      14-Oct-2014    Now uses $PSScriptRoot to reference the root drive
       
     .SYNOPSIS
       Exports and Evaluates the Event Log and produces a report
@@ -71,7 +72,9 @@ begin
     #Check if we were provided an output path
     if (!($Path.Length -gt 0))
     {
-        $Path = "$((Get-item (Get-Variable MyInvocation -Scope 0).Value.MyCommand.Path).PSDrive.Root)SCOMReports\";
+        #$Path = "$((Get-item (Get-Variable MyInvocation -Scope 0).Value.MyCommand.Path).PSDrive.Root)SCOMReports\";
+        #new variable PowerShell3+
+        $Path = "$((Get-item $PSScriptRoot).PSDrive.Root)SCOMReports\";
     }
 
     #add the current date to the output folder
