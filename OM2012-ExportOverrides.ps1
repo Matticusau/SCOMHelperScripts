@@ -24,7 +24,7 @@ New-SCManagementGroupConnection -ComputerName $inputScomMS
 
 
 #Set Culture Info# In this case Dutch Belgium
-$cultureInfo = [System.Globalization.CultureInfo]'nl-BE'
+$cultureInfo = [System.Globalization.CultureInfo]'EN-AU'
 
 #Error handling setup
 $error.clear()
@@ -44,10 +44,10 @@ $strBackupdate = $Backupdate.ToString()
 
 #Define backup location
 #$locationroot = "C:\backup\SCOM\overridesexport\"
-$locationroot = "D:\SCOMBackup\overridesexport\"
+$locationroot = "$((Get-item $PSScriptRoot).PSDrive.Root)SCOMBackup\OverridesExport\"
 if((test-path $locationroot) -eq $false) { mkdir $locationroot }
 $locationfolder = $strbackupdate -Replace "/","-"
-$location = $locationroot + $locationfolder
+$location = Join-Path -Path $locationroot -ChildPath $locationfolder;
 new-item "$location" -type directory -force
 
 #Delete backup location older than 15 days
@@ -122,7 +122,8 @@ foreach($folder in $folders)
      }
  
     #exports to CSV
-     $filename = $location + $mp.name + ".csv"
+     $filename = Join-Path -Path $location -ChildPath "$($mp.name + ".csv")";
+     Write-Host "Filename=$filename";
      $MPRows | Export-Csv $filename
  }
  

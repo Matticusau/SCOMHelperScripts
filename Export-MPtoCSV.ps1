@@ -15,6 +15,7 @@
       --------------------------------------------------------------------------------------------------
       1.0      MLavery      20-Feb-2014    Initial Coding
       1.1      MLavery      26-Mar-2014    Code Optimisation (param binding, help, etc)
+      1.2      MLavery      14-Oct-2014    Now uses $PSScriptRoot to reference the root drive
 
     .SYNOPSIS
       Exports the Monitors and Rules from a Management Pack either from a SCOM Management Server or from Disk
@@ -105,7 +106,9 @@ begin
     #Check if we were provided an output path
     if (!($OutputPath.Length -gt 0))
     {
-        $OutputPath = "$((Get-item (Get-Variable MyInvocation -Scope 0).Value.MyCommand.Path).PSDrive.Root)SCOMBackup\MPExports\";
+        #$OutputPath = "$((Get-item (Get-Variable MyInvocation -Scope 0).Value.MyCommand.Path).PSDrive.Root)SCOMBackup\MPExports\";
+        #new variable PowerShell3+
+        $OutputPath = "$((Get-item $PSScriptRoot).PSDrive.Root)SCOMBackup\MPExports\";
     }
 
     #add the current date to the output folder

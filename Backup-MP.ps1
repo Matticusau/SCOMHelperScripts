@@ -14,6 +14,7 @@
       Version  Who          When           What
       --------------------------------------------------------------------------------------------------
       1.0      MLavery      10-Mar-2014    Initial Coding
+      1.1      MLavery      14-Oct-2014    Now uses $PSScriptRoot to reference the root drive
 
     .SYNOPSIS
       Backs up an unsealed Management Pack to Disk
@@ -91,9 +92,11 @@ begin
     #Check if we were provided an output path
     if (!($OutputPath.Length -gt 0))
     {
-        $OutputPath = "$((Get-item (Get-Variable MyInvocation -Scope 0).Value.MyCommand.Path).PSDrive.Root)SCOMBackup\MPBackups\";
+        #$OutputPath = "$((Get-item (Get-Variable MyInvocation -Scope 0).Value.MyCommand.Path).PSDrive.Root)SCOMBackup\MPBackups\";
+        #new variable PowerShell3+
+        $OutputPath = "$((Get-item $PSScriptRoot).PSDrive.Root)SCOMBackup\MPBackups\";
     }
-
+    
     #add the current date to the output folder
     $OutputPath = Join-Path -Path $OutputPath -ChildPath "$(Get-Date -Format {yyyy-MM-dd})\";
 
